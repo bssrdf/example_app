@@ -19,5 +19,6 @@ xhttp.onreadystatechange = function () {
   }
 }
 
-xhttp.open("GET", "/exampleapp/data.json", true)
+// xhttp.open("GET", "/exampleapp/data.json", true)
+xhttp.open("GET", "/data.json", true)
 xhttp.send()

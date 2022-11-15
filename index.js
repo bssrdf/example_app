@@ -2,13 +2,17 @@ const express = require('express')
 const path = require('path')
 const boyParser = require('body-parser')
 
-const PORT = process.env.PORT || 5000
+//process.env.NODE_ENV = 'development';
+const PORT = process.env.PORT || 5001
 const MAX_NOTES = 100;
-const PATH_PREFIX = '/exampleapp';
+// const PATH_PREFIX = '/exampleapp';
+const PATH_PREFIX = '';
 
 const app = express()
 
-app.use(boyParser())
+// app.use(boyParser())
+app.use(boyParser.urlencoded({extended: false}))
+app.use(boyParser.json())
 
 const notes = [
   {
@@ -142,6 +146,7 @@ router.post('/new_note_spa', (req, res) => {
 
 router.post('/new_note', (req, res) => {
   if (typeof req.body.note === 'string') {
+    console.log(req.body.note)
     createNote(formatNote({
       content: req.body.note,
       date: new Date()
@@ -152,8 +157,10 @@ router.post('/new_note', (req, res) => {
 })
 
 if (process.env.NODE_ENV === 'development') {
+  console.log('in develop')
   app.use(PATH_PREFIX, router)
 } else {
+  console.log('in production')
   app.use('/', router)
 }
 

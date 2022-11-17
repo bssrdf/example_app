@@ -1,6 +1,10 @@
+
+// import Deque from './deque.js'
+const {Deque} = require('./deque')
 const express = require('express')
 const path = require('path')
 const boyParser = require('body-parser')
+
 
 //process.env.NODE_ENV = 'development';
 const PORT = process.env.PORT || 5001
@@ -14,31 +18,47 @@ const app = express()
 app.use(boyParser.urlencoded({extended: false}))
 app.use(boyParser.json())
 
-const notes = [
-  {
-    content: 'HTML is easy',
-    date: new Date('2019-05-23T17:30:31.098Z'),
-  },
-  {
-    content: 'Browser can execute only Javascript',
-    date: new Date('2019-05-23T18:39:34.091Z'),
-  },
-  {
-    content: 'Most important methods of HTTP-protocol are GET and POST',
+// const notes = [
+//   {
+//     content: 'HTML is easy',
+//     date: new Date('2019-05-23T17:30:31.098Z'),
+//   },
+//   {
+//     content: 'Browser can execute only Javascript',
+//     date: new Date('2019-05-23T18:39:34.091Z'),
+//   },
+//   {
+//     content: 'Most important methods of HTTP-protocol are GET and POST',
+//     date: new Date('2019-05-23T19:20:14.298Z'),
+//   },
+// ]
+const notes = new Deque(MAX_NOTES)
+
+notes.insertLast({
+      content: 'HTML is easy',
+      date: new Date('2019-05-23T17:30:31.098Z'),
+    })
+notes.insertLast({
+  content: 'Browser can execute only Javascript',
+  date: new Date('2019-05-23T18:39:34.091Z'),
+})
+notes.insertLast({
+  content: 'Most important methods of HTTP-protocol are GET and POST',
     date: new Date('2019-05-23T19:20:14.298Z'),
-  },
-]
+})
+
+
 
 const isValidNote = note => {
   return typeof note === 'object' && typeof note.content === 'string' && !isNaN(new Date(note.date).getTime())
 }
 
 const createNote = note => {
-  notes.push(note);
-
-  if (notes.length > MAX_NOTES) {
-    notes.shift()
-  }
+  // notes.push(note);
+  notes.insertLast(note);
+  // if (notes.length > MAX_NOTES) {
+    // notes.shift()
+  // }
 }
 
 const formatNote = note => {
@@ -131,7 +151,8 @@ router.get('/spa', (req, res) => {
 })
 
 router.get('/data.json', (req, res) => {
-  res.json(notes)
+  // res.json(notes)
+  res.json(notes.getdata())
 })
 
 router.post('/new_note_spa', (req, res) => {

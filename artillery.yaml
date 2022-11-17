@@ -1,0 +1,25 @@
+config:
+  target: "http://192.168.29.229"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 20
+      name: Ramp up load
+  payload:
+    path: "notes.csv"
+    fields:
+      - "note"
+  
+scenarios:
+  - name: "add new notes"
+    flow:
+      # - get:
+      #     url: "/notes"
+      - post:
+          url: "/new_note"
+          form:
+            note: "{{ note }}"
+            
